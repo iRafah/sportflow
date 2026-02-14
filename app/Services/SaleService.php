@@ -1,9 +1,13 @@
 <?php
 
+use App\Models\Sale;
+use App\Enums\PaymentMethod;
+use App\Enums\SaleStatus;
+
 class SaleService
 {
     /**
-     * Create 
+     * Create a new sale and adjust installments/status if payment method is cash.
      */
     public function create(array $data): Sale
     {
@@ -20,7 +24,10 @@ class SaleService
 
         return Sale::create($data);
     }
-
+    
+    /**
+     * Update a sale and adjust installments/status if payment method is cash.
+     */
     public function update(Sale $sale, array $data): Sale
     {
         $sale->update($data);

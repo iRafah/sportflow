@@ -11,6 +11,9 @@ use Inertia\Inertia;
 
 class SaleController extends Controller
 {
+    /**
+     * Display a listing of the sales with optional filters for client, status, and clothing name.
+     */
     public function index(Request $request)
     {
         $query = Sale::with('client');

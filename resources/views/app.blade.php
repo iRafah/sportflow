@@ -7,8 +7,9 @@
     <title>SportFlow</title>
 
     @viteReactRefresh
-    @vite(['resources/js/app.jsx'])
     @inertiaHead
+    @vite(['resources/js/app.jsx'])
+    
 </head>
 <body class="bg-gray-50">
     @inertia

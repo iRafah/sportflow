@@ -3,12 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SaleController;
-
-Route::get('/', function () {
-    return inertia('Sales/Index');
-});
+use Inertia\Inertia;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
+Route::get('/', [SaleController::class, 'index'])
+    ->name('home');
+
 Route::resource('/sales', SaleController::class);
+Route::post('/sales/new', [SaleController::class, 'create'])
+    ->name('create-sale');
