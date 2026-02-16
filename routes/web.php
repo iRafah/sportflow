@@ -11,6 +11,4 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 Route::get('/', [SaleController::class, 'index'])
     ->name('home');
 
-Route::resource('/sales', SaleController::class);
-Route::post('/sales/new', [SaleController::class, 'create'])
-    ->name('create-sale');
+Route::resource('sales', SaleController::class);

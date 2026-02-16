@@ -1,8 +1,9 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
+import Pagination from '../../Components/Pagination';
 
 export default function Index({ sales, clients, filters }) {
-
+    console.log(sales);
     const [filterData, setFilterData] = useState(filters);
 
     function applyFilters() {
@@ -12,6 +13,13 @@ export default function Index({ sales, clients, filters }) {
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-6">Vendas</h1>
+
+            <a
+                href="/sales/create"
+                className="bg-blue-600 text-white px-4 py-2 rounded inline-block mb-6"
+            >
+                + Nova Venda
+            </a>
 
             {/* Filters */}
             <div className="grid md:grid-cols-3 gap-4 mb-6">
@@ -79,15 +87,9 @@ export default function Index({ sales, clients, filters }) {
                         ))}
                     </tbody>
                 </table>
+                
             </div>
+            <Pagination meta={sales} />
         </div>
     );
 }
-
-// export default function Index() {
-//     return (
-//         <>
-//             <p className="title">Finally</p>
-//         </>
-//     );
-// }

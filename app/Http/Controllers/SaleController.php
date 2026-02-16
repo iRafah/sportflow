@@ -37,7 +37,7 @@ class SaleController extends Controller
             'filters' => $request->only(['client_id', 'status', 'clothing_name'])
         ]);
     }
-
+    
     public function create()
     {
         return Inertia::render('Sales/Create', [
@@ -49,7 +49,8 @@ class SaleController extends Controller
     {
         $service->create($request->validated());
 
-        return redirect()->route('sales.index')
+        return redirect()
+            ->route('sales.index')
             ->with('success', 'Venda criada com sucesso!');
     }
 }
