@@ -1,7 +1,13 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
-import Pagination from '../../Components/Pagination';
-import { EditIcon, DeleteIcon } from '../../Components/Icons';
+import FlashMessage from '@/Components/FlashMessage';
+
+import { TrashIcon, PencilIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+
+import Pagination from '@/Components/Pagination';
+import AppLayout from '@/Layouts/AppLayout';
+
+Index.layout = page => <AppLayout children={page} />;
 
 export default function Index({ sales, clients, filters }) {
     const [filterData, setFilterData] = useState(filters);
@@ -12,8 +18,9 @@ export default function Index({ sales, clients, filters }) {
 
     return (
         <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Vendas</h1>
+            <FlashMessage />
 
+            <h1 className="text-2xl font-bold mb-6">Vendas</h1>
             <a
                 href="/sales/create"
                 className="bg-green-600 text-white px-4 py-2 rounded inline-block mb-6"
@@ -89,7 +96,7 @@ export default function Index({ sales, clients, filters }) {
                                         href={`/sales/${sale.id}/edit`}
                                         className="text-blue-600"
                                     >
-                                        <EditIcon />
+                                        <PencilIcon className="w-5 h-5" />
                                     </a>
 
                                     <button
@@ -100,8 +107,7 @@ export default function Index({ sales, clients, filters }) {
                                         }}
                                         className="text-red-600"
                                     >
-                                        <DeleteIcon />
-
+                                        <TrashIcon className="w-5 h-5" />
                                     </button>
                                 </td>
 
