@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { HomeIcon, ShoppingBagIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, ShoppingBagIcon, UserGroupIcon, PowerIcon } from '@heroicons/react/24/outline';
 import NavLink from '@/Components/NavLink';
+import { router } from '@inertiajs/react';
 
 export default function AppLayout({ children }) {
     const [open, setOpen] = useState(false);
@@ -38,6 +39,16 @@ export default function AppLayout({ children }) {
                     <NavLink href="/clients" icon={UserGroupIcon}>
                         Clientes
                     </NavLink>
+
+                    <div className="mt-auto p-4 border-t border-gray-700">
+                        <button
+                            onClick={() => router.post('/logout')}
+                            className="flex items-center gap-2 text-red-400 hover:text-red-600 transition"
+                        >
+                            <PowerIcon className="w-5 h-5" />
+                            Sair                            
+                        </button>
+                    </div>
                 </nav>
             </aside>
 

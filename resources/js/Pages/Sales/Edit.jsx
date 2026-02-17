@@ -1,5 +1,5 @@
 import { useForm } from '@inertiajs/react';
-import AppLayout from '../../Layouts/AppLayout';
+import AppLayout from '@/Layouts/AppLayout';
 
 Edit.layout = page => <AppLayout children={page} />;
 

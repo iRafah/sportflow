@@ -3,12 +3,20 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SaleController;
-use Inertia\Inertia;
-
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard');
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', [SaleController::class, 'index'])
     ->name('home');
 
-Route::resource('sales', SaleController::class);
+// User Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store']);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('sales', SaleController::class);
+});

@@ -2,7 +2,6 @@ import { Link, usePage } from '@inertiajs/react';
 
 export default function NavLink({ href, icon: Icon, children }) {
     const { url } = usePage();
-    console.log('Current URL:', url);
 
     const isActive =
         href === '/'
