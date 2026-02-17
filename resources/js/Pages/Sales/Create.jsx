@@ -60,6 +60,7 @@ export default function Create({ clients }) {
 
                 {data.payment_method === 'parcelado' && (
                     <>
+                        <p className=''>N° de parcelas</p>
                         <input
                             type="number"
                             className="w-full border p-2 rounded"
@@ -69,7 +70,7 @@ export default function Create({ clients }) {
                                 setData('total_installments', e.target.value)
                             }
                         />
-
+                        <p>Parcelas pagas</p>
                         <input
                             type="number"
                             className="w-full border p-2 rounded"

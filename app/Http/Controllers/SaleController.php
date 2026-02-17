@@ -8,6 +8,7 @@ use App\Services\SaleService;
 use App\Http\Requests\StoreSaleRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Requests\UpdateSaleRequest;
 
 class SaleController extends Controller
 {
@@ -19,15 +20,21 @@ class SaleController extends Controller
         $query = Sale::with('client');
 
         // Filters
-        $query->when($request->client_id, fn ($q) =>
+        $query->when(
+            $request->client_id,
+            fn($q) =>
             $q->where('client_id', $request->client_id)
         );
 
-        $query->when($request->status, fn ($q) =>
+        $query->when(
+            $request->status,
+            fn($q) =>
             $q->where('status', $request->status)
         );
 
-        $query->when($request->clothing_name, fn ($q) =>
+        $query->when(
+            $request->clothing_name,
+            fn($q) =>
             $q->where('clothing_name', 'like', "%{$request->clothing_name}%")
         );
 
@@ -37,7 +44,10 @@ class SaleController extends Controller
             'filters' => $request->only(['client_id', 'status', 'clothing_name'])
         ]);
     }
-    
+
+    /**
+     * Show the form for creating a new sale.
+     */
     public function create()
     {
         return Inertia::render('Sales/Create', [
@@ -45,6 +55,9 @@ class SaleController extends Controller
         ]);
     }
 
+    /**
+     * Store a newly created sale in storage.
+     */
     public function store(StoreSaleRequest $request, SaleService $service)
     {
         $service->create($request->validated());
@@ -52,5 +65,34 @@ class SaleController extends Controller
         return redirect()
             ->route('sales.index')
             ->with('success', 'Venda criada com sucesso!');
+    }
+
+    /**
+     * Show the form for editing the specified sale.
+     */
+    public function edit(Sale $sale)
+    {
+        return Inertia::render('Sales/Edit', [
+            'sale' => $sale->load('client'),
+            'clients' => Client::orderBy('name')->get()
+        ]);
+    }
+
+    public function update(UpdateSaleRequest $request, Sale $sale, SaleService $service)
+    {
+        $service->update($sale, $request->validated());
+
+        return redirect()
+            ->route('sales.index')
+            ->with('success', 'Venda atualizada com sucesso!');
+    }
+
+    public function destroy(Sale $sale)
+    {
+        $sale->delete();
+
+        return redirect()
+            ->route('sales.index')
+            ->with('success', 'Venda removida.');
     }
 }

@@ -1,9 +1,9 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import Pagination from '../../Components/Pagination';
+import { EditIcon, DeleteIcon } from '../../Components/Icons';
 
 export default function Index({ sales, clients, filters }) {
-    console.log(sales);
     const [filterData, setFilterData] = useState(filters);
 
     function applyFilters() {
@@ -16,7 +16,7 @@ export default function Index({ sales, clients, filters }) {
 
             <a
                 href="/sales/create"
-                className="bg-blue-600 text-white px-4 py-2 rounded inline-block mb-6"
+                className="bg-green-600 text-white px-4 py-2 rounded inline-block mb-6"
             >
                 + Nova Venda
             </a>
@@ -60,13 +60,14 @@ export default function Index({ sales, clients, filters }) {
             {/* Table */}
             <div className="overflow-x-auto">
                 <table className="w-full border">
-                    <thead className="bg-gray-100">
+                    <thead className="bg-gray-100 text-align-left">
                         <tr>
-                            <th className="p-2">Cliente</th>
+                            <th className="p-2  text-align-left">Cliente</th>
                             <th className="p-2">Peça</th>
                             <th className="p-2">Preço</th>
                             <th className="p-2">Parcelas</th>
                             <th className="p-2">Status</th>
+                            <th className="p-2">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,14 +81,35 @@ export default function Index({ sales, clients, filters }) {
                                 </td>
                                 <td className="p-2">
                                     {sale.status === 'pago'
-                                        ? '🟢 Pago'
-                                        : '🟡 Pendente'}
+                                        ? '✔ Pago'
+                                        : '⏳ Pendente'}
                                 </td>
+                                <td className="p-2 space-x-2 flex flex-direction-row">
+                                    <a
+                                        href={`/sales/${sale.id}/edit`}
+                                        className="text-blue-600"
+                                    >
+                                        <EditIcon />
+                                    </a>
+
+                                    <button
+                                        onClick={() => {
+                                            if (confirm('Tem certeza que deseja excluir?')) {
+                                                router.delete(`sales/${sale.id}`);
+                                            }
+                                        }}
+                                        className="text-red-600"
+                                    >
+                                        <DeleteIcon />
+
+                                    </button>
+                                </td>
+
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                
+
             </div>
             <Pagination meta={sales} />
         </div>
