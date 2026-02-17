@@ -2,6 +2,9 @@ import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import Pagination from '../../Components/Pagination';
 import { EditIcon, DeleteIcon } from '../../Components/Icons';
+import AppLayout from '../../Layouts/AppLayout';
+
+Index.layout = page => <AppLayout children={page} />;
 
 export default function Index({ sales, clients, filters }) {
     const [filterData, setFilterData] = useState(filters);

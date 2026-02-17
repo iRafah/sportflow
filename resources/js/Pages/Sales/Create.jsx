@@ -1,4 +1,7 @@
 import { useForm } from '@inertiajs/react'
+import AppLayout from '../../Layouts/AppLayout';
+
+Create.layout = page => <AppLayout children={page} />;
 
 export default function Create({ clients }) {
     const { data, setData, post, processing, errors } = useForm({
