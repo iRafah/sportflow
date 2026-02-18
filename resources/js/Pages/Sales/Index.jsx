@@ -13,7 +13,10 @@ export default function Index({ sales, clients, filters }) {
     const [filterData, setFilterData] = useState(filters);
 
     function applyFilters() {
-        router.get('/sales', filterData, { preserveState: true });
+        router.get('/sales', filterData, { 
+            preserveState: true, 
+            preserveScroll: true 
+        });
     }
 
     return (

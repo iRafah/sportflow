@@ -1,5 +1,6 @@
 import { useForm } from '@inertiajs/react'
 import AppLayout from '@/Layouts/AppLayout';
+import SearchableSelect from '@/Components/SearchableSelect';
 
 Create.layout = page => <AppLayout children={page} />;
 
@@ -23,19 +24,13 @@ export default function Create({ clients }) {
             <h1 className="text-2xl font-bold mb-6">Nova Venda</h1>
 
             <form onSubmit={submit} className="space-y-4">
-
-                <select
-                    className="w-full border p-2 rounded"
+                <SearchableSelect
+                    options={clients}
                     value={data.client_id}
-                    onChange={e => setData('client_id', e.target.value)}
-                >
-                    <option value="">Selecione o Cliente</option>
-                    {clients.map(client => (
-                        <option key={client.id} value={client.id}>
-                            {client.name}
-                        </option>
-                    ))}
-                </select>
+                    onChange={(id) => setData('client_id', id)}
+                    placeholder="Buscar cliente..."
+                    createUrl="/clients/create"
+                />
 
                 <input
                     className="w-full border p-2 rounded"
