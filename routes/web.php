@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ClientController;
 
 Route::get('/', [SaleController::class, 'index'])
     ->name('home');
@@ -19,4 +20,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('sales', SaleController::class);
+
+    Route::resource('clients', ClientController::class);
 });
+
+// 
