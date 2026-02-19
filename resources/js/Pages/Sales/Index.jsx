@@ -1,10 +1,10 @@
-import { router } from '@inertiajs/react';
+import { router, Link } from '@inertiajs/react';
 import { useState } from 'react';
+
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 import FlashMessage from '@/Components/FlashMessage';
-
-import { TrashIcon, PencilIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
-
 import Pagination from '@/Components/Pagination';
+import { Button } from '@/Components/ui/button';
 import AppLayout from '@/Layouts/AppLayout';
 
 Index.layout = page => <AppLayout children={page} />;
@@ -24,15 +24,15 @@ export default function Index({ sales, clients, filters }) {
             <FlashMessage />
 
             <h1 className="text-2xl font-bold mb-6">Vendas</h1>
-            <a
-                href="/sales/create"
-                className="bg-green-600 text-white px-4 py-2 rounded inline-block mb-6"
-            >
-                + Nova Venda
-            </a>
+            
+            <Link href="/sales/create" className="m-0">
+                <Button className="bg-green-600 hover:bg-green-700 text-white p-5">
+                    Nova venda
+                </Button>
+            </Link>
 
             {/* Filters */}
-            <div className="grid md:grid-cols-3 gap-4 mb-6">
+            <div className="grid md:grid-cols-3 gap-4 my-6">
 
                 <select
                     className="border p-2 rounded"
@@ -59,12 +59,12 @@ export default function Index({ sales, clients, filters }) {
                     <option value="pendente">Pendente</option>
                 </select>
 
-                <button
+                 <Button 
                     onClick={applyFilters}
-                    className="bg-gray-800 text-white rounded px-4"
+                    className="bg-gray-800 text-white p-5"
                 >
                     Filtrar
-                </button>
+                </Button>
             </div>
 
             {/* Table */}

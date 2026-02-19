@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import SmartPagination from '@/Components/Pagination';
 import FlashMessage from '@/Components/FlashMessage';
+import { Link } from '@inertiajs/react';
+import { Button } from '@/Components/ui/button';
 
 function Index({ clients, filters }) {
     const [search, setSearch] = useState(filters.search || '');
@@ -42,20 +44,18 @@ function Index({ clients, filters }) {
                     onChange={e => setSearch(e.target.value)}
                     className="border p-2 rounded w-full max-w-sm"
                 />
-
-                <button
+                <Button 
                     onClick={applyFilter}
-                    className="bg-gray-800 text-white px-4 rounded"
+                    className="bg-gray-800 text-white p-5"
                 >
                     Buscar
-                </button>
+                </Button>
 
-                <a
-                    href="/clients/create"
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
-                >
-                    + Novo Cliente
-                </a>
+                <Link href="/clients/create">
+                    <Button className="bg-green-600 hover:bg-green-700 text-white p-5">
+                        Novo cliente
+                    </Button>
+                </Link>
             </div>
 
             {/* Table */}
