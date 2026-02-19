@@ -6,9 +6,6 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientController;
 
-Route::get('/', [SaleController::class, 'index'])
-    ->name('home');
-
 // User Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -16,6 +13,8 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])
+        ->name('dashboard');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -23,5 +22,3 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('clients', ClientController::class);
 });
-
-// 
