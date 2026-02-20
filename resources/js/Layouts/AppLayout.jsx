@@ -3,7 +3,8 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { HomeIcon, ShoppingBagIcon, UserGroupIcon, PowerIcon } from '@heroicons/react/24/outline';
 import NavLink from '@/Components/NavLink';
 import { router } from '@inertiajs/react';
-
+import { Toaster } from '@/Components/ui/sonner';
+ 
 export default function AppLayout({ children }) {
     const [open, setOpen] = useState(false);
 
@@ -73,7 +74,13 @@ export default function AppLayout({ children }) {
                 <main className="p-6 flex-1">
                     {children}
                 </main>
-            </div>
+                
+                <Toaster 
+                    richColors 
+                    position="bottom-right"
+                    expand={true}                    
+                />
+            </div>           
         </div>
     );
 }
