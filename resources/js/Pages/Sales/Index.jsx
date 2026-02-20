@@ -1,7 +1,7 @@
 import { router, Link, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
-import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, PencilIcon, CurrencyDollarIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 import Pagination from '@/Components/Pagination';
 import { Button } from '@/Components/ui/button';
 import { toast } from 'sonner';
@@ -25,16 +25,16 @@ export default function Index({ sales, clients, filters }) {
     }, [flash]);
 
     function applyFilters() {
-        router.get('/sales', filterData, { 
-            preserveState: true, 
-            preserveScroll: true 
+        router.get('/sales', filterData, {
+            preserveState: true,
+            preserveScroll: true
         });
     }
 
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-6">Vendas</h1>
-            
+
             <Link href="/sales/create" className="m-0">
                 <Button className="bg-green-600 hover:bg-green-700 text-white p-5">
                     Nova venda
@@ -69,7 +69,7 @@ export default function Index({ sales, clients, filters }) {
                     <option value="pendente">Pendente</option>
                 </select>
 
-                 <Button 
+                <Button
                     onClick={applyFilters}
                     className="bg-gray-800 text-white p-5"
                 >
@@ -79,10 +79,10 @@ export default function Index({ sales, clients, filters }) {
 
             {/* Table */}
             <div className="overflow-x-auto">
-                <table className="w-full border">
-                    <thead className="bg-gray-100 text-align-left">
-                        <tr>
-                            <th className="p-2  text-align-left">Cliente</th>
+                <table className="w-full border text-align-left">
+                    <thead className="bg-gray-100">
+                        <tr className='text-left'>
+                            <th className="p-2">Cliente</th>
                             <th className="p-2">Peça</th>
                             <th className="p-2">Preço</th>
                             <th className="p-2">Parcelas</th>
@@ -101,29 +101,35 @@ export default function Index({ sales, clients, filters }) {
                                 </td>
                                 <td className="p-2">
                                     {sale.status === 'pago'
-                                        ? '✔'
-                                        : '⏳'}
+                                        ? <CurrencyDollarIcon className="w-6 h-6 text-green-600" />
+                                        : <CreditCardIcon className="w-6 h-6 text-yellow-600" />}
                                 </td>
                                 <td className="p-2 space-x-2 flex flex-direction-row">
-                                    <a
-                                        href={`/sales/${sale.id}/edit`}
-                                        className="text-blue-600"
-                                    >
-                                        <PencilIcon className="w-5 h-5" />
-                                    </a>
+                                    <Link href={`/sales/${sale.id}/edit`} className="m-0">
+                                        <Button variant="outline">
+                                            <PencilIcon className="w-5 h-5" />
+                                        </Button>
+                                    </Link>
 
-                                    <button
+
+                                    <Button
+                                        variant="outline"
                                         onClick={() => {
-                                            if (confirm('Tem certeza que deseja excluir?')) {
-                                                router.delete(`sales/${sale.id}`);
-                                            }
+                                            toast("Tem certeza que deseja excluir?", {
+                                                description: "Essa ação não pode ser desfeita.",
+                                                action: {
+                                                    label: "Sim, excluir",
+                                                    onClick: () => {
+                                                        router.delete(`sales/${sale.id}`);
+                                                    }
+                                                }
+                                            })
                                         }}
-                                        className="text-red-600"
                                     >
                                         <TrashIcon className="w-5 h-5" />
-                                    </button>
-                                </td>
+                                    </Button>
 
+                                </td>
                             </tr>
                         ))}
                     </tbody>

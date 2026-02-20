@@ -40,6 +40,7 @@ export default function Edit({ sale, clients }) {
                     className="w-full border p-2 rounded"
                     value={data.clothing_name}
                     onChange={e => setData('clothing_name', e.target.value)}
+                    placeholder="Nome da Peça"
                 />
 
                 <input
@@ -47,6 +48,7 @@ export default function Edit({ sale, clients }) {
                     className="w-full border p-2 rounded"
                     value={data.price}
                     onChange={e => setData('price', e.target.value)}
+                    placeholder="Preço"
                 />
 
                 <select
@@ -60,6 +62,7 @@ export default function Edit({ sale, clients }) {
 
                 {data.payment_method === 'parcelado' && (
                     <>
+                        <p className=''>N° de parcelas</p>
                         <input
                             type="number"
                             className="w-full border p-2 rounded"
@@ -68,7 +71,7 @@ export default function Edit({ sale, clients }) {
                                 setData('total_installments', e.target.value)
                             }
                         />
-
+                        <p>Parcelas pagas</p>
                         <input
                             type="number"
                             className="w-full border p-2 rounded"

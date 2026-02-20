@@ -4,6 +4,7 @@ import AppLayout from '@/Layouts/AppLayout';
 import SmartPagination from '@/Components/Pagination';
 import { Link } from '@inertiajs/react';
 import { Button } from '@/Components/ui/button';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 
 import { toast } from 'sonner';
 
@@ -91,25 +92,28 @@ function Index({ clients, filters }) {
 
                                 <td className="p-3 text-right">
                                     <div className="flex justify-end gap-4">
+                                        <Link href={`/clients/${client.id}/edit`} className="m-0">
+                                            <Button variant="outline">
+                                                <PencilIcon className="w-5 h-5" />
+                                            </Button>
+                                        </Link>
 
-                                        <a
-                                            href={`/clients/${client.id}/edit`}
-                                            className="text-blue-600 hover:text-blue-800"
-                                        >
-                                            Editar
-                                        </a>
-
-                                        <button
+                                        <Button
+                                            variant="outline"
                                             onClick={() => {
-                                                if (confirm('Excluir cliente?')) {
-                                                    router.delete(`/clients/${client.id}`);
-                                                }
+                                                toast("Tem certeza que deseja excluir?", {
+                                                    description: "Essa ação não pode ser desfeita.",
+                                                    action: {
+                                                        label: "Sim, excluir",
+                                                        onClick: () => {
+                                                            router.delete(`/clients/${client.id}`);
+                                                        }
+                                                    }
+                                                })
                                             }}
-                                            className="text-red-600 hover:text-red-800"
                                         >
-                                            Excluir
-                                        </button>
-
+                                            <TrashIcon className="w-5 h-5" />
+                                        </Button>
                                     </div>
                                 </td>
                             </tr>
