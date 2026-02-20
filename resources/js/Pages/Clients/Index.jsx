@@ -6,11 +6,16 @@ import { Link } from '@inertiajs/react';
 import { Button } from '@/Components/ui/button';
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
 
+import ClientsForm from '@/Components/ClientsForm';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
+
 import { toast } from 'sonner';
 
 function Index({ clients, filters }) {
     const [search, setSearch] = useState(filters.search || '');
     const { flash } = usePage().props;
+    const [open, setOpen] = useState(false);
+    const [selectedClient, setSelectedClient] = useState(null);
 
     function applyFilter() {
         router.get('/clients', { search }, {
@@ -64,11 +69,15 @@ function Index({ clients, filters }) {
                     Buscar
                 </Button>
 
-                <Link href="/clients/create">
-                    <Button className="bg-green-600 hover:bg-green-700 text-white p-5">
-                        Novo cliente
-                    </Button>
-                </Link>
+                <Button
+                    onClick={() => {
+                        setSelectedClient(null);
+                        setOpen(true);
+                    }}
+                    className="bg-green-600 hover:bg-green-700 text-white p-5"
+                >
+                    Novo cliente
+                </Button>
             </div>
 
             {/* Table */}
@@ -91,12 +100,13 @@ function Index({ clients, filters }) {
                                 <td className="p-3">{client.phone}</td>
 
                                 <td className="p-3 text-right">
-                                    <div className="flex justify-end gap-4">
-                                        <Link href={`/clients/${client.id}/edit`} className="m-0">
-                                            <Button variant="outline">
-                                                <PencilIcon className="w-5 h-5" />
-                                            </Button>
-                                        </Link>
+                                    <div className="flex justify-end gap-4">                                        
+                                        <Button variant="outline" onClick={() => {
+                                            setSelectedClient(client);
+                                            setOpen(true);
+                                        }}>
+                                            <PencilIcon className="w-5 h-5" />
+                                        </Button>
 
                                         <Button
                                             variant="outline"
@@ -120,6 +130,23 @@ function Index({ clients, filters }) {
                         ))}
                     </tbody>
                 </table>
+                 {/* Dialog para criação/edição de venda */}
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>
+                                {selectedClient ? 'Editar Cliente' : 'Novo Cliente'}
+                            </DialogTitle>
+                        </DialogHeader>
+
+                        <ClientsForm
+                            client={selectedClient}                            
+                            onSuccess={() => {
+                                setOpen(false);
+                            }}
+                        />
+                    </DialogContent>
+                </Dialog>
             </div>
 
             <SmartPagination meta={clients} />

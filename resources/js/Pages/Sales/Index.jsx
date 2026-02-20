@@ -1,16 +1,23 @@
 import { router, Link, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
-import { TrashIcon, PencilIcon, CurrencyDollarIcon, CreditCardIcon } from '@heroicons/react/24/outline';
+import AppLayout from '@/Layouts/AppLayout';
+// Components
 import Pagination from '@/Components/Pagination';
 import { Button } from '@/Components/ui/button';
+import SalesForm from '@/Components/SalesForm';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
 import { toast } from 'sonner';
 
-import AppLayout from '@/Layouts/AppLayout';
+// Icons
+import { TrashIcon, PencilIcon, CurrencyDollarIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 
 Index.layout = page => <AppLayout children={page} />;
 
 export default function Index({ sales, clients, filters }) {
+    const [open, setOpen] = useState(false);
+    const [selectedSale, setSelectedSale] = useState(null);
+
     const [filterData, setFilterData] = useState(filters);
     const { flash } = usePage().props;
 
@@ -35,11 +42,15 @@ export default function Index({ sales, clients, filters }) {
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-6">Vendas</h1>
 
-            <Link href="/sales/create" className="m-0">
-                <Button className="bg-green-600 hover:bg-green-700 text-white p-5">
-                    Nova venda
-                </Button>
-            </Link>
+
+            <Button
+                onClick={() => {
+                    setSelectedSale(null);
+                    setOpen(true)
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white p-5">
+                Nova venda
+            </Button>
 
             {/* Filters */}
             <div className="grid md:grid-cols-3 gap-4 my-6">
@@ -105,13 +116,15 @@ export default function Index({ sales, clients, filters }) {
                                         : <CreditCardIcon className="w-6 h-6 text-yellow-600" />}
                                 </td>
                                 <td className="p-2 space-x-2 flex flex-direction-row">
-                                    <Link href={`/sales/${sale.id}/edit`} className="m-0">
-                                        <Button variant="outline">
-                                            <PencilIcon className="w-5 h-5" />
-                                        </Button>
-                                    </Link>
-
-
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => {
+                                            setSelectedSale(sale);
+                                            setOpen(true);
+                                        }}
+                                    >
+                                        <PencilIcon className="w-5 h-5" />
+                                    </Button>
                                     <Button
                                         variant="outline"
                                         onClick={() => {
@@ -128,13 +141,30 @@ export default function Index({ sales, clients, filters }) {
                                     >
                                         <TrashIcon className="w-5 h-5" />
                                     </Button>
-
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
 
+                {/* Dialog para criação/edição de venda */}
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>
+                                {selectedSale ? 'Editar Venda' : 'Nova Venda'}
+                            </DialogTitle>
+                        </DialogHeader>
+
+                        <SalesForm
+                            sale={selectedSale}
+                            clients={clients}
+                            onSuccess={() => {
+                                setOpen(false);
+                            }}
+                        />
+                    </DialogContent>
+                </Dialog>
             </div>
             <Pagination meta={sales} />
         </div>
