@@ -1,16 +1,28 @@
-import { router, Link } from '@inertiajs/react';
-import { useState } from 'react';
+import { router, Link, usePage } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
-import FlashMessage from '@/Components/FlashMessage';
 import Pagination from '@/Components/Pagination';
 import { Button } from '@/Components/ui/button';
+import { toast } from 'sonner';
+
 import AppLayout from '@/Layouts/AppLayout';
 
 Index.layout = page => <AppLayout children={page} />;
 
 export default function Index({ sales, clients, filters }) {
     const [filterData, setFilterData] = useState(filters);
+    const { flash } = usePage().props;
+
+    useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+
+        if (flash?.error) {
+            toast.error(flash.error);
+        }
+    }, [flash]);
 
     function applyFilters() {
         router.get('/sales', filterData, { 
@@ -21,8 +33,6 @@ export default function Index({ sales, clients, filters }) {
 
     return (
         <div className="p-6">
-            <FlashMessage />
-
             <h1 className="text-2xl font-bold mb-6">Vendas</h1>
             
             <Link href="/sales/create" className="m-0">
@@ -91,8 +101,8 @@ export default function Index({ sales, clients, filters }) {
                                 </td>
                                 <td className="p-2">
                                     {sale.status === 'pago'
-                                        ? '✔ Pago'
-                                        : '⏳ Pendente'}
+                                        ? '✔'
+                                        : '⏳'}
                                 </td>
                                 <td className="p-2 space-x-2 flex flex-direction-row">
                                     <a

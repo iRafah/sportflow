@@ -2,12 +2,14 @@ import { router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import SmartPagination from '@/Components/Pagination';
-import FlashMessage from '@/Components/FlashMessage';
 import { Link } from '@inertiajs/react';
 import { Button } from '@/Components/ui/button';
 
+import { toast } from 'sonner';
+
 function Index({ clients, filters }) {
     const [search, setSearch] = useState(filters.search || '');
+    const { flash } = usePage().props;
 
     function applyFilter() {
         router.get('/clients', { search }, {
@@ -17,6 +19,17 @@ function Index({ clients, filters }) {
         });
     }
 
+    useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+
+        if (flash?.error) {
+            toast.error(flash.error);
+        }
+    }, [flash]);
+
+    // Filter clients when search changes.
     useEffect(() => {
         const timeout = setTimeout(() => {
             router.get('/clients', { search }, {
@@ -33,7 +46,6 @@ function Index({ clients, filters }) {
         <div>
             <h1 className="text-2xl font-bold mb-6">Clientes</h1>
 
-            <FlashMessage />
 
             {/* Search */}
             <div className="flex gap-2 mb-6">
@@ -44,7 +56,7 @@ function Index({ clients, filters }) {
                     onChange={e => setSearch(e.target.value)}
                     className="border p-2 rounded w-full max-w-sm"
                 />
-                <Button 
+                <Button
                     onClick={applyFilter}
                     className="bg-gray-800 text-white p-5"
                 >
