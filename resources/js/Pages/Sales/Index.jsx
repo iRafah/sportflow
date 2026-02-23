@@ -41,8 +41,6 @@ export default function Index({ sales, clients, filters }) {
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-6">Vendas</h1>
-
-
             <Button
                 onClick={() => {
                     setSelectedSale(null);
