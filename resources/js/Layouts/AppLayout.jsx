@@ -19,7 +19,7 @@ export default function AppLayout({ children }) {
                 md:relative md:translate-x-0`}
             >
                 <div className="p-6 text-xl font-bold border-b border-gray-700 flex justify-between items-center">
-                    ⚽ SportFlow
+                    <img src="/images/sportflow-brand.png" alt="Logo" />
 
                     {/* Close button mobile */}
                     <button
