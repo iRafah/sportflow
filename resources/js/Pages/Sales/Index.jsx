@@ -1,38 +1,57 @@
-import { router } from '@inertiajs/react';
-import { useState } from 'react';
-import FlashMessage from '@/Components/FlashMessage';
+import { router, Link, usePage } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
-import { TrashIcon, PencilIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
-
-import Pagination from '@/Components/Pagination';
 import AppLayout from '@/Layouts/AppLayout';
+// Components
+import Pagination from '@/Components/Pagination';
+import { Button } from '@/Components/ui/button';
+import SalesForm from '@/Components/SalesForm';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
+import { toast } from 'sonner';
+
+// Icons
+import { TrashIcon, PencilIcon, CurrencyDollarIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 
 Index.layout = page => <AppLayout children={page} />;
 
 export default function Index({ sales, clients, filters }) {
+    const [open, setOpen] = useState(false);
+    const [selectedSale, setSelectedSale] = useState(null);
+
     const [filterData, setFilterData] = useState(filters);
+    const { flash } = usePage().props;
+
+    useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+
+        if (flash?.error) {
+            toast.error(flash.error);
+        }
+    }, [flash]);
 
     function applyFilters() {
-        router.get('/sales', filterData, { 
-            preserveState: true, 
-            preserveScroll: true 
+        router.get('/sales', filterData, {
+            preserveState: true,
+            preserveScroll: true
         });
     }
 
     return (
         <div className="p-6">
-            <FlashMessage />
-
             <h1 className="text-2xl font-bold mb-6">Vendas</h1>
-            <a
-                href="/sales/create"
-                className="bg-green-600 text-white px-4 py-2 rounded inline-block mb-6"
-            >
-                + Nova Venda
-            </a>
+            <Button
+                onClick={() => {
+                    setSelectedSale(null);
+                    setOpen(true)
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white p-5">
+                Nova venda
+            </Button>
 
             {/* Filters */}
-            <div className="grid md:grid-cols-3 gap-4 mb-6">
+            <div className="grid md:grid-cols-3 gap-4 my-6">
 
                 <select
                     className="border p-2 rounded"
@@ -59,20 +78,20 @@ export default function Index({ sales, clients, filters }) {
                     <option value="pendente">Pendente</option>
                 </select>
 
-                <button
+                <Button
                     onClick={applyFilters}
-                    className="bg-gray-800 text-white rounded px-4"
+                    className="bg-gray-800 text-white p-5"
                 >
                     Filtrar
-                </button>
+                </Button>
             </div>
 
             {/* Table */}
             <div className="overflow-x-auto">
-                <table className="w-full border">
-                    <thead className="bg-gray-100 text-align-left">
-                        <tr>
-                            <th className="p-2  text-align-left">Cliente</th>
+                <table className="w-full border text-align-left">
+                    <thead className="bg-gray-100">
+                        <tr className='text-left'>
+                            <th className="p-2">Cliente</th>
                             <th className="p-2">Peça</th>
                             <th className="p-2">Preço</th>
                             <th className="p-2">Parcelas</th>
@@ -91,34 +110,59 @@ export default function Index({ sales, clients, filters }) {
                                 </td>
                                 <td className="p-2">
                                     {sale.status === 'pago'
-                                        ? '✔ Pago'
-                                        : '⏳ Pendente'}
+                                        ? <CurrencyDollarIcon className="w-6 h-6 text-green-600" />
+                                        : <CreditCardIcon className="w-6 h-6 text-yellow-600" />}
                                 </td>
                                 <td className="p-2 space-x-2 flex flex-direction-row">
-                                    <a
-                                        href={`/sales/${sale.id}/edit`}
-                                        className="text-blue-600"
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => {
+                                            setSelectedSale(sale);
+                                            setOpen(true);
+                                        }}
                                     >
                                         <PencilIcon className="w-5 h-5" />
-                                    </a>
-
-                                    <button
+                                    </Button>
+                                    <Button
+                                        variant="outline"
                                         onClick={() => {
-                                            if (confirm('Tem certeza que deseja excluir?')) {
-                                                router.delete(`sales/${sale.id}`);
-                                            }
+                                            toast("Tem certeza que deseja excluir?", {
+                                                description: "Essa ação não pode ser desfeita.",
+                                                action: {
+                                                    label: "Sim, excluir",
+                                                    onClick: () => {
+                                                        router.delete(`sales/${sale.id}`);
+                                                    }
+                                                }
+                                            })
                                         }}
-                                        className="text-red-600"
                                     >
                                         <TrashIcon className="w-5 h-5" />
-                                    </button>
+                                    </Button>
                                 </td>
-
                             </tr>
                         ))}
                     </tbody>
                 </table>
 
+                {/* Dialog para criação/edição de venda */}
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>
+                                {selectedSale ? 'Editar Venda' : 'Nova Venda'}
+                            </DialogTitle>
+                        </DialogHeader>
+
+                        <SalesForm
+                            sale={selectedSale}
+                            clients={clients}
+                            onSuccess={() => {
+                                setOpen(false);
+                            }}
+                        />
+                    </DialogContent>
+                </Dialog>
             </div>
             <Pagination meta={sales} />
         </div>

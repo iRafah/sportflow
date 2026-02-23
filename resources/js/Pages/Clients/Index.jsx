@@ -2,10 +2,20 @@ import { router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import AppLayout from '@/Layouts/AppLayout';
 import SmartPagination from '@/Components/Pagination';
-import FlashMessage from '@/Components/FlashMessage';
+import { Link } from '@inertiajs/react';
+import { Button } from '@/Components/ui/button';
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+
+import ClientsForm from '@/Components/ClientsForm';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/Components/ui/dialog';
+
+import { toast } from 'sonner';
 
 function Index({ clients, filters }) {
     const [search, setSearch] = useState(filters.search || '');
+    const { flash } = usePage().props;
+    const [open, setOpen] = useState(false);
+    const [selectedClient, setSelectedClient] = useState(null);
 
     function applyFilter() {
         router.get('/clients', { search }, {
@@ -15,6 +25,17 @@ function Index({ clients, filters }) {
         });
     }
 
+    useEffect(() => {
+        if (flash?.success) {
+            toast.success(flash.success);
+        }
+
+        if (flash?.error) {
+            toast.error(flash.error);
+        }
+    }, [flash]);
+
+    // Filter clients when search changes.
     useEffect(() => {
         const timeout = setTimeout(() => {
             router.get('/clients', { search }, {
@@ -31,7 +52,6 @@ function Index({ clients, filters }) {
         <div>
             <h1 className="text-2xl font-bold mb-6">Clientes</h1>
 
-            <FlashMessage />
 
             {/* Search */}
             <div className="flex gap-2 mb-6">
@@ -42,20 +62,22 @@ function Index({ clients, filters }) {
                     onChange={e => setSearch(e.target.value)}
                     className="border p-2 rounded w-full max-w-sm"
                 />
-
-                <button
+                <Button
                     onClick={applyFilter}
-                    className="bg-gray-800 text-white px-4 rounded"
+                    className="bg-gray-800 text-white p-5"
                 >
                     Buscar
-                </button>
+                </Button>
 
-                <a
-                    href="/clients/create"
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                <Button
+                    onClick={() => {
+                        setSelectedClient(null);
+                        setOpen(true);
+                    }}
+                    className="bg-green-600 hover:bg-green-700 text-white p-5"
                 >
-                    + Novo Cliente
-                </a>
+                    Novo cliente
+                </Button>
             </div>
 
             {/* Table */}
@@ -78,32 +100,53 @@ function Index({ clients, filters }) {
                                 <td className="p-3">{client.phone}</td>
 
                                 <td className="p-3 text-right">
-                                    <div className="flex justify-end gap-4">
+                                    <div className="flex justify-end gap-4">                                        
+                                        <Button variant="outline" onClick={() => {
+                                            setSelectedClient(client);
+                                            setOpen(true);
+                                        }}>
+                                            <PencilIcon className="w-5 h-5" />
+                                        </Button>
 
-                                        <a
-                                            href={`/clients/${client.id}/edit`}
-                                            className="text-blue-600 hover:text-blue-800"
-                                        >
-                                            Editar
-                                        </a>
-
-                                        <button
+                                        <Button
+                                            variant="outline"
                                             onClick={() => {
-                                                if (confirm('Excluir cliente?')) {
-                                                    router.delete(`/clients/${client.id}`);
-                                                }
+                                                toast("Tem certeza que deseja excluir?", {
+                                                    description: "Essa ação não pode ser desfeita.",
+                                                    action: {
+                                                        label: "Sim, excluir",
+                                                        onClick: () => {
+                                                            router.delete(`/clients/${client.id}`);
+                                                        }
+                                                    }
+                                                })
                                             }}
-                                            className="text-red-600 hover:text-red-800"
                                         >
-                                            Excluir
-                                        </button>
-
+                                            <TrashIcon className="w-5 h-5" />
+                                        </Button>
                                     </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+                 {/* Dialog para criação/edição de venda */}
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>
+                                {selectedClient ? 'Editar Cliente' : 'Novo Cliente'}
+                            </DialogTitle>
+                        </DialogHeader>
+
+                        <ClientsForm
+                            client={selectedClient}                            
+                            onSuccess={() => {
+                                setOpen(false);
+                            }}
+                        />
+                    </DialogContent>
+                </Dialog>
             </div>
 
             <SmartPagination meta={clients} />

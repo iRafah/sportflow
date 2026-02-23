@@ -1,3 +1,4 @@
+import './login.style.css';
 import { useForm } from '@inertiajs/react';
 
 export default function Login() {
@@ -16,7 +17,7 @@ export default function Login() {
 
             <div className="w-full max-w-md bg-white p-8 rounded shadow">
 
-                <h1 className="text-2xl font-bold mb-6 text-center">
+                <h1 className="text-2xl font-bold mb-6 text-center brand-name">
                     SportFlow Login
                 </h1>
 
