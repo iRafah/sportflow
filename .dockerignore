@@ -2,5 +2,15 @@ node_modules
 vendor
 .git
 .env
+.env.*
 Dockerfile
-docker-compose.yml
+docker-compose*.yml
+storage/framework/cache
+storage/framework/sessions
+storage/framework/views
+storage/logs
+bootstrap/cache
+.idea
+.vscode
+*.md
+tests

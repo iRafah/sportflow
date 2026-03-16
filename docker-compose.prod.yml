@@ -1,0 +1,27 @@
+# Production overrides for VPS / self-hosted server.
+# Run: docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+#
+# First deploy or after asset changes:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml down -v
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+
+services:
+  app:
+    build:
+      target: production
+    env_file:
+      - .env.docker.prod
+    volumes:
+      # Named volume initialised from the image's public/ on first creation.
+      # Docker copies image contents into an empty named volume automatically.
+      # Run with `down -v` on deployments to pick up new built assets.
+      - public_assets:/var/www/public
+
+  nginx:
+    ports:
+      - '80:80'
+    volumes:
+      - public_assets:/var/www/public:ro  # read-only; assets come from app image
+
+volumes:
+  public_assets:
