@@ -22,34 +22,18 @@ services:
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        fromDatabase:
-          name: sportflow-db
-          property: host
+        value: db.upmjpgqxkibgrusnchjl.supabase.co
       - key: DB_PORT
-        fromDatabase:
-          name: sportflow-db
-          property: port
+        value: 5432
       - key: DB_DATABASE
-        fromDatabase:
-          name: sportflow-db
-          property: database
+        value: postgres
       - key: DB_USERNAME
-        fromDatabase:
-          name: sportflow-db
-          property: user
+        value: postgres
       - key: DB_PASSWORD
-        fromDatabase:
-          name: sportflow-db
-          property: password
+        sync: false
       - key: SESSION_DRIVER
         value: database
       - key: CACHE_STORE
         value: database
       - key: QUEUE_CONNECTION
         value: database
-
-databases:
-  - name: sportflow-db
-    plan: starter
-    databaseName: sportflow
-    user: sportflow
