@@ -3,6 +3,7 @@
 .env
 .env.backup
 .env.production
+.env.docker.prod
 .phpactor.json
 .phpunit.result.cache
 /.fleet
@@ -18,6 +19,11 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+/storage/logs
+/bootstrap/cache
 /vendor
 Homestead.json
 Homestead.yaml

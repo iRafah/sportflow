@@ -1,0 +1,21 @@
+# Local development overrides — auto-merged by Docker Compose.
+# Run: docker compose up
+
+services:
+  app:
+    build:
+      target: development
+    env_file:
+      - .env.docker
+    volumes:
+      - .:/var/www
+
+  nginx:
+    ports:
+      - '8000:80'
+    volumes:
+      - .:/var/www  # gives nginx access to public/ on the host
+
+  postgres:
+    ports:
+      - '5432:5432'
