@@ -9,6 +9,7 @@ services:
     region: oregon
     healthCheckPath: /
     port: 80
+    preDeployCommand: "php artisan migrate --force"
     envVars:
       - key: APP_ENV
         value: production
@@ -17,7 +18,7 @@ services:
       - key: APP_KEY
         generateValue: true
       - key: APP_URL
-        value: https://sportflow.onrender.com  # change to your custom domain
+        value: https://sportflow.onrender.com
       - key: LOG_LEVEL
         value: error
       - key: DB_CONNECTION
