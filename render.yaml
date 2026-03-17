@@ -8,6 +8,7 @@ services:
     plan: starter
     region: oregon
     healthCheckPath: /
+    port: 80
     envVars:
       - key: APP_ENV
         value: production
