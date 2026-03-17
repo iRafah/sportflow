@@ -42,8 +42,10 @@ class DashboardController extends Controller
         $pending = Sale::where('status', 'pendente')->count();
 
         $totalRevenue = Sale::sum('price');
-        $paidRevenue = Sale::where('status', 'pago')->sum('price');
-        $pendingRevenue = Sale::where('status', 'pendente')->sum('price');
+        $paidRevenue = Sale::selectRaw('SUM(price * paid_installments / NULLIF(total_installments, 0)) as total')
+            ->first()->total ?? 0;
+        $pendingRevenue = Sale::selectRaw('SUM(price - price * paid_installments / NULLIF(total_installments, 0)) as total')
+            ->first()->total ?? 0;
 
         // Sales by month
         $salesByMonth = Sale::selectRaw("

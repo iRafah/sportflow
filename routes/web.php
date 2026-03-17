@@ -17,7 +17,6 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('sales', SaleController::class);
 
     Route::resource('clients', ClientController::class);
