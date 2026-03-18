@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y nodejs npm \
 
 COPY . .
 
-RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache \
+RUN mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 RUN composer install --no-interaction
@@ -61,7 +61,7 @@ COPY . .
 COPY --from=node-builder /app/public/build public/build
 
 # Ensure required directories exist before composer post-install scripts run
-RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache \
+RUN mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 # Install PHP deps without dev dependencies

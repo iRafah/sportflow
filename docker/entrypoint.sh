@@ -2,7 +2,7 @@
 set -e
 
 echo "[entrypoint] Caching configuration..."
-mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache
+mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache storage/logs bootstrap/cache
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
